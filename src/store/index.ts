@@ -13,8 +13,13 @@ interface MoviesState {
 const useMoviesStore = create<MoviesState>((set) => ({
   movies: [],
   fetchMovies: async () => {
-    const response = await axios.get('/movie/now_playing');
-    set({movies: response.data.results})
+    try {
+      const response = await axios.get('/movie/now_playing');
+      set({movies: response.data.results})
+    } catch (e: any) {
+      console.error(e.message);
+    }
+    
   }
 }))
 
@@ -76,19 +81,28 @@ const useTicketBooking = create<booking>((set)=>({
   bookedTickets: null,
   isLoading: false,
   doBookTickets: async (data) => {
-    await axios.post("https://fakru-mw-default-rtdb.firebaseio.com/booking.json", data);
+    try {
+      await axios.post("https://fakru-mw-default-rtdb.firebaseio.com/booking.json", data);
+    } catch (e: any) {
+      console.error(e.message);
+    }    
   },
   getBookedTickets: async (id) => {
-    set({isLoading: true});
-    const response = await axios.get(`https://fakru-mw-default-rtdb.firebaseio.com/booking.json?id=${id}`);
-    const data = await response.data;
-    const bookedSeats:any = {};
-    for (let key in data) {
-      const movieId = data[key].id;
-      if (!bookedSeats[movieId]) bookedSeats[movieId] = [];
-      bookedSeats[data[key].id].push(...data[key].seats)
+    try {
+      set({isLoading: true});
+      const response = await axios.get(`https://fakru-mw-default-rtdb.firebaseio.com/booking.json?id=${id}`);
+      const data = await response.data;
+      const bookedSeats:any = {};
+      for (let key in data) {
+        const movieId = data[key].id;
+        if (!bookedSeats[movieId]) bookedSeats[movieId] = [];
+        bookedSeats[data[key].id].push(...data[key].seats)
+      }
+      set({bookedTickets: bookedSeats[id], isLoading: false});
+    } catch (e: any) {
+      console.error(e.message);
     }
-    set({bookedTickets: bookedSeats[id], isLoading: false});
+    
   }
 }))
 
