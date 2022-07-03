@@ -1,28 +1,31 @@
-import React, {useEffect} from "react";
+import { useSeatStore, useSelectedStore } from "../store";
 
-const Modal = ({ children, isOpen, handleClose }: { children: any, isOpen: boolean, handleClose: any }) => {
-  if (!isOpen) return null;  
+const Modal = ({ children, isOpen, handleClose, handleBooking }: { children: any, isOpen: boolean, handleClose: any, handleBooking: any }) => {
+  const {movie} = useSelectedStore();
+  const {counter, selectedSeats} = useSeatStore();
+  const handleProceed = () => {
+    if (!counter) return;
+    const data = {
+        id: movie.id,
+        title: movie.title,
+        seats: selectedSeats.map(d=>JSON.parse(d))
+    }
+    handleBooking(data);
+  }
+  if (!isOpen || !movie) return null;
   return (
     <>
         <div
         className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none"
         >
-        <div className="relative w-auto my-6 mx-auto max-w-6xl">
+        <div className="relative w-auto my-6 mx-auto max-w-screen-sm justify-center">
             {/*content*/}
             <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
             {/*header*/}
             <div className="flex items-start justify-between p-5 border-b border-solid border-slate-200 rounded-t">
-                <h3 className="text-3xl font-semibold">
-                Modal Title
+                <h3 className="text-3xl m-0 font-semibold">
+                {movie.title}
                 </h3>
-                <button
-                className="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
-                onClick={handleClose()}
-                >
-                <span className="bg-transparent text-black opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none">
-                    ×
-                </span>
-                </button>
             </div>
             {/*body*/}
             <div className="relative p-6 flex-auto">
@@ -38,11 +41,11 @@ const Modal = ({ children, isOpen, handleClose }: { children: any, isOpen: boole
                 Close
                 </button>
                 <button
-                className="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                className="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg mr-1 mb-1 ease-linear transition-all duration-150"
                 type="button"
-                onClick={handleClose()}
+                onClick={handleProceed}
                 >
-                Proceed
+                Book Ticket
                 </button>
             </div>
             </div>

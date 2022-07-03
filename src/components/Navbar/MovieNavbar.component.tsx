@@ -1,6 +1,4 @@
-import React from 'react';
 import {
-  BiChevronDown,
   BiShareAlt,
   BiSearch,
   BiMenu,
@@ -40,12 +38,6 @@ const NavLg = () => {
         </div>
       </div>
       <div className='flex items-center gap-3'>
-        <span className='text-gray-400 flex items-center text-4xs hover:text-white cursor-pointer'>
-          Jammu <BiChevronDown />
-        </span>
-        <button className='bg-buttonCol-400 text-white text-sm rounded px-2 py-1'>
-          Sign in
-        </button>
         <div>
           <div className='w-8 h-8 text-white'>
             <BiMenu className='w-full h-full ' />

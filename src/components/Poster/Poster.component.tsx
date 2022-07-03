@@ -1,10 +1,12 @@
 import React from 'react';
-import { useModalStore } from '../../store';
+import { useModalStore, useSelectedStore } from '../../store';
 
 const Poster = (props: any) => {
   const { toggleModal } = useModalStore();
+  const { setMovie } = useSelectedStore();
   const movieSelectHandler = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
+    setMovie(props);
     toggleModal();
   };
   return (
